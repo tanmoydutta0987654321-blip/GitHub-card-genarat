@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+    volumes:
+      - ./backend/static:/app/static
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:80"
+    environment:
+      - BACKEND_URL=http://localhost:8080
+    depends_on:
+      - backend

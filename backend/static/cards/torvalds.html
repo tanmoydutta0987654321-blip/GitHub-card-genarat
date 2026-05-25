@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Linus Torvalds's Dev Card</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Theme definitions */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --accent-color: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-family: 'Outfit', sans-serif;
+      --badge-bg: rgba(56, 189, 248, 0.15);
+      --badge-text: #38bdf8;
+    }
+    
+    .theme-hacker {
+      --bg-gradient: linear-gradient(135deg, #020617 0%, #090d16 100%);
+      --card-bg: rgba(9, 13, 22, 0.85);
+      --accent-color: #22c55e;
+      --accent-glow: rgba(34, 197, 94, 0.4);
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --border-color: rgba(34, 197, 94, 0.25);
+      --font-family: 'Fira Code', monospace;
+      --badge-bg: rgba(34, 197, 94, 0.15);
+      --badge-text: #22c55e;
+    }
+    
+    .theme-builder {
+      --bg-gradient: linear-gradient(135deg, #0b1329 0%, #1c2541 100%);
+      --card-bg: rgba(28, 37, 65, 0.8);
+      --accent-color: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: rgba(59, 130, 246, 0.2);
+      --font-family: 'Outfit', sans-serif;
+      --badge-bg: rgba(59, 130, 246, 0.15);
+      --badge-text: #60a5fa;
+    }
+
+    .theme-researcher {
+      --bg-gradient: linear-gradient(135deg, #180030 0%, #0c001c 100%);
+      --card-bg: rgba(24, 0, 48, 0.7);
+      --accent-color: #a855f7;
+      --accent-glow: rgba(168, 85, 247, 0.4);
+      --text-main: #faf5ff;
+      --text-muted: #d8b4fe;
+      --border-color: rgba(168, 85, 247, 0.2);
+      --font-family: 'Outfit', sans-serif;
+      --badge-bg: rgba(168, 85, 247, 0.15);
+      --badge-text: #c084fc;
+    }
+
+    .theme-designer {
+      --bg-gradient: linear-gradient(135deg, #1f0010 0%, #000000 100%);
+      --card-bg: rgba(31, 0, 16, 0.75);
+      --accent-color: #ec4899;
+      --accent-glow: rgba(236, 72, 153, 0.4);
+      --text-main: #fdf2f8;
+      --text-muted: #f472b6;
+      --border-color: rgba(236, 72, 153, 0.2);
+      --font-family: 'Outfit', sans-serif;
+      --badge-bg: rgba(236, 72, 153, 0.15);
+      --badge-text: #f472b6;
+    }
+
+    .theme-open-source-hero {
+      --bg-gradient: linear-gradient(135deg, #1c0d02 0%, #0f0500 100%);
+      --card-bg: rgba(28, 13, 2, 0.75);
+      --accent-color: #f97316;
+      --accent-glow: rgba(249, 115, 22, 0.4);
+      --text-main: #fff7ed;
+      --text-muted: #ffb076;
+      --border-color: rgba(249, 115, 22, 0.2);
+      --font-family: 'Outfit', sans-serif;
+      --badge-bg: rgba(249, 115, 22, 0.15);
+      --badge-text: #ff9d5c;
+    }
+
+    /* Core Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      font-family: var(--font-family);
+      color: var(--text-main);
+      overflow-y: auto;
+    }
+
+    /* Premium card wrapper with animated glow */
+    .card-container {
+      position: relative;
+      width: 420px;
+      margin: 2rem auto;
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px var(--accent-glow);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .card-container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 60px var(--accent-glow);
+      border-color: var(--accent-color);
+    }
+
+    /* Header Profile Info */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 0 15px var(--accent-glow);
+      object-fit: cover;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .username {
+      font-size: 0.95rem;
+      color: var(--accent-color);
+      text-decoration: none;
+      margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    /* Vibe and description */
+    .vibe {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-color);
+      margin: 1.2rem 0;
+      font-style: italic;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      padding: 0.8rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.2rem;
+    }
+
+    /* Skills Badges */
+    .skills-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Top Projects */
+    .projects-container {
+      margin-top: 1.5rem;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border-color);
+      padding: 0.9rem;
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--accent-color);
+      transform: scale(1.01);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .project-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-main);
+    }
+
+    .project-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .project-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0 0 0.5rem 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+
+    .project-lang {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+    
+    .fun-fact {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .fun-fact strong {
+      color: var(--accent-color);
+    }
+  </style>
+</head>
+<body class="theme-builder">
+
+  <div class="card-container">
+    <div class="profile-header">
+      <img src="https://avatars.githubusercontent.com/u/1024025?v=4" alt="Linus Torvalds" class="avatar" onerror="this.src='https://github.com/identicons/torvalds.png'">
+      <div class="info">
+        <h1 class="name">Linus Torvalds</h1>
+        <a href="https://github.com/torvalds" target="_blank" class="username">@torvalds</a>
+      </div>
+    </div>
+
+    <div class="vibe">
+      &ldquo;An awesome builder exploring the digital frontier.&rdquo;
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-val">11</span>
+        <span class="stat-label">Repositories</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">303734</span>
+        <span class="stat-label">Followers</span>
+      </div>
+    </div>
+
+    <div class="skills-container">
+      <div class="section-title">Top Skills</div>
+      <div class="badges">
+        
+        <span class="badge">C</span>
+        
+        <span class="badge">C++</span>
+        
+        <span class="badge">OpenSCAD</span>
+        
+      </div>
+    </div>
+
+    <div class="projects-container">
+      <div class="section-title">Featured Projects</div>
+      
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-name">linux</h3>
+          <span class="project-stars">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            233770
+          </span>
+        </div>
+        <p class="project-desc">Linux kernel source tree</p>
+        <div class="project-meta">
+          <span class="project-lang">C</span>
+        </div>
+      </div>
+      
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-name">AudioNoise</h3>
+          <span class="project-stars">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4369
+          </span>
+        </div>
+        <p class="project-desc">Random digital audio effects</p>
+        <div class="project-meta">
+          <span class="project-lang">C</span>
+        </div>
+      </div>
+      
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-name">uemacs</h3>
+          <span class="project-stars">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            2027
+          </span>
+        </div>
+        <p class="project-desc">Random version of microemacs with my private modificatons</p>
+        <div class="project-meta">
+          <span class="project-lang">C</span>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="fun-fact">
+      <strong>Fun Fact:</strong> Likes building neat things in the open-source community.
+    </div>
+  </div>
+
+</body>
+</html>

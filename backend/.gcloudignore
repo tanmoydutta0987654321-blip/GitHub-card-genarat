@@ -1,0 +1,13 @@
+.gcloudignore
+.git
+.gitignore
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+static/cards/

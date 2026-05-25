@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Dev Card Generator</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --border-color: #30363d;
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --accent-primary: #58a6ff;
+      --accent-purple: #bc8cff;
+      --accent-gradient: linear-gradient(135deg, #1f6feb 0%, #8957e5 100%);
+      --error-color: #f85149;
+      --success-color: #3fb950;
+      --font-main: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 3rem 1.5rem;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Gradient Background Glows */
+    .bg-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(137, 87, 229, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      z-index: 10;
+    }
+
+    /* Header Design */
+    header {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      background: var(--accent-gradient);
+      border-radius: 16px;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 24px rgba(137, 87, 229, 0.25);
+    }
+
+    .header-logo svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.75px;
+      background: linear-gradient(180deg, #ffffff 0%, #c9d1d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .subheading {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Creator Form Panel */
+    .creator-panel {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      .input-group {
+        flex-direction: column;
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #1f6feb;
+      background-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.15);
+    }
+
+    input[type="text"]::placeholder {
+      color: #484f58;
+    }
+
+    button {
+      background: var(--accent-gradient);
+      border: none;
+      border-radius: 12px;
+      padding: 0.9rem 1.8rem;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 15px rgba(137, 87, 229, 0.2);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(137, 87, 229, 0.35);
+      filter: brightness(1.1);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Loading Pulsing Skeleton */
+    .skeleton-container {
+      display: none;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2.5rem;
+      aspect-ratio: 420 / 640;
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .skeleton-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, #161b22 25%, #21262d 50%, #161b22 75%);
+      background-size: 200% 100%;
+      animation: pulse-loading 1.5s infinite;
+    }
+
+    .skeleton-bar {
+      height: 16px;
+      background: linear-gradient(90deg, #161b22 25%, #21262d 50%, #161b22 75%);
+      background-size: 200% 100%;
+      border-radius: 8px;
+      width: 80%;
+      animation: pulse-loading 1.5s infinite;
+    }
+
+    .skeleton-bar.short { width: 45%; }
+    .skeleton-bar.title { height: 24px; width: 60%; }
+    .skeleton-bar.large-box { height: 180px; width: 100%; border-radius: 16px; }
+
+    @keyframes pulse-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Result Preview Container */
+    .result-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-iframe-wrapper {
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 420 / 640;
+      border-radius: 24px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+      background-color: var(--card-bg);
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Action Buttons */
+    .actions-row {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .btn-action {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      box-shadow: none;
+    }
+
+    .btn-action:hover {
+      background: #21262d;
+      border-color: #8b949e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-action svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
+
+    /* Error Notification Message Box */
+    .error-panel {
+      display: none;
+      align-items: flex-start;
+      gap: 1rem;
+      background-color: rgba(248, 81, 73, 0.08);
+      border: 1px solid rgba(248, 81, 73, 0.2);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      animation: fade-in 0.4s ease;
+    }
+
+    .error-icon {
+      color: var(--error-color);
+      flex-shrink: 0;
+      display: flex;
+      margin-top: 2px;
+    }
+
+    .error-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
+
+    .error-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .error-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #ff7b72;
+    }
+
+    .error-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <main class="main-container">
+    
+    <!-- Header -->
+    <header>
+      <div class="header-logo">
+        <svg viewBox="0 0 24 24">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <h1>GitHub Dev Card Generator</h1>
+      <p class="subheading">Enter any public GitHub username</p>
+    </header>
+
+    <!-- Generator input form -->
+    <section class="creator-panel">
+      <form id="generator-form" onsubmit="generateCard(event)">
+        <div class="input-group">
+          <input type="text" id="username-input" placeholder="e.g. torvalds" required autocomplete="off" spellcheck="false">
+          <button type="submit" id="submit-btn">
+            <span>Generate Card</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Error state panel -->
+    <section class="error-panel" id="error-box">
+      <div class="error-icon">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <div class="error-details">
+        <div class="error-title" id="error-title-text">GitHub Profile Error</div>
+        <div class="error-desc" id="error-desc-text">Could not load the specified user profile. Make sure the username is correct and public.</div>
+      </div>
+    </section>
+
+    <!-- Loading pulsing skeleton -->
+    <section class="skeleton-container" id="skeleton-box">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-bar title"></div>
+      <div class="skeleton-bar short"></div>
+      <div class="skeleton-bar"></div>
+      <div class="skeleton-bar large-box"></div>
+    </section>
+
+    <!-- Result / Saved Card Rendering Area -->
+    <section class="result-container" id="result-box">
+      <div class="card-iframe-wrapper">
+        <iframe id="card-iframe"></iframe>
+      </div>
+      
+      <!-- Copy Link share button -->
+      <div class="actions-row">
+        <button class="btn-action" onclick="copyCardUrl()" id="copy-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span id="copy-btn-text">Share Card</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let currentCardUrl = "";
+    
+    async function generateCard(event) {
+      event.preventDefault();
+      
+      const usernameInput = document.getElementById('username-input');
+      const username = usernameInput.value.trim();
+      const submitBtn = document.getElementById('submit-btn');
+      const errorBox = document.getElementById('error-box');
+      const skeletonBox = document.getElementById('skeleton-box');
+      const resultBox = document.getElementById('result-box');
+      const cardIframe = document.getElementById('card-iframe');
+      
+      if (!username) return;
+
+      // Reset state and show loading
+      submitBtn.disabled = true;
+      submitBtn.querySelector('span').innerText = 'Generating...';
+      errorBox.style.display = 'none';
+      resultBox.style.display = 'none';
+      skeletonBox.style.display = 'flex';
+
+      let backendBaseUrl = '$BACKEND_URL';
+      if (backendBaseUrl.startsWith('$')) {
+        backendBaseUrl = 'http://localhost:8080';
+      }
+      
+      try {
+        const response = await fetch(`${backendBaseUrl}/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username }),
+        });
+
+        if (!response.ok) {
+          const errBody = await response.json().catch(() => ({ detail: 'Failed to process request.' }));
+          throw new Error(errBody.detail || `Response code: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.message || 'Verification failed.');
+        }
+
+        currentCardUrl = `${backendBaseUrl}${data.card_url}`;
+        
+        // Use srcdoc to render the returned HTML inline seamlessly
+        cardIframe.srcdoc = data.html;
+        
+        // Hide loading and fade-in the card result box
+        skeletonBox.style.display = 'none';
+        resultBox.style.display = 'flex';
+        
+      } catch (err) {
+        console.error(err);
+        skeletonBox.style.display = 'none';
+        
+        // Present friendly error state messages
+        const errorDesc = document.getElementById('error-desc-text');
+        if (err.message.includes('404') || err.message.toLowerCase().includes('not found') || err.message.toLowerCase().includes('exist')) {
+          errorDesc.innerText = `GitHub username "${username}" doesn't exist, is private, or has no public profile data.`;
+        } else {
+          errorDesc.innerText = `An error occurred: ${err.message}. Please check that your backend server is active on port 8080 and try again.`;
+        }
+        
+        errorBox.style.display = 'flex';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').innerText = 'Generate Card';
+      }
+    }
+
+    function copyCardUrl() {
+      if (!currentCardUrl) return;
+      
+      navigator.clipboard.writeText(currentCardUrl).then(() => {
+        const btnText = document.getElementById('copy-btn-text');
+        const originalText = btnText.innerText;
+        btnText.innerText = 'URL Copied!';
+        
+        // Style feedback
+        const copyBtn = document.getElementById('copy-btn');
+        copyBtn.style.borderColor = 'var(--success-color)';
+        copyBtn.style.color = 'var(--success-color)';
+        
+        setTimeout(() => {
+          btnText.innerText = originalText;
+          copyBtn.style.borderColor = 'var(--border-color)';
+          copyBtn.style.color = 'var(--text-primary)';
+        }, 2000);
+      }).catch(err => {
+        alert('Failed to copy to clipboard: ' + err);
+      });
+    }
+  </script>
+</body>
+</html>
